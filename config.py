@@ -72,10 +72,12 @@ class OrchestratorConfig(BaseModel):
         - ``project_root`` は解析対象リポジトリのルート。相対の場合は base
           （設定ファイルの配置ディレクトリ）基準で解決する。対象ファイル（targets.txt
           内の相対パス）はこの project_root 基準で存在チェック・解析される。
+        - ``output_dir`` は生成した仕様書の出力先。相対の場合は project_root 基準で
+          解決する（``project_root`` + ``output_dir`` ＝ 解析対象プロジェクト配下に出力）。
         - オーケストレーター自身が扱うパス（``targets_file`` / ``templates_dir`` /
-          ``output_dir`` / ``status_file`` / ``log_file``）は project_root ではなく
-          base 基準で解決する。これにより project_root に別リポジトリを指定しても、
-          テンプレートや対象一覧・出力・ログはオーケストレーター側に留まる。
+          ``status_file`` / ``log_file``）は project_root ではなく base 基準で解決する。
+          これにより project_root に別リポジトリを指定しても、テンプレート・対象一覧・
+          ログはオーケストレーター側に留まる。
 
         絶対パスを指定した項目はそのまま使用される。
         """
@@ -85,11 +87,14 @@ class OrchestratorConfig(BaseModel):
         def under_base(path: Path) -> Path:
             return clean_path(_absolutize(path, base))
 
+        def under_root(path: Path) -> Path:
+            return clean_path(_absolutize(path, root))
+
         return self.model_copy(
             update={
                 "project_root": root,
                 "targets_file": under_base(self.targets_file),
-                "output_dir": under_base(self.output_dir),
+                "output_dir": under_root(self.output_dir),
                 "templates_dir": under_base(self.templates_dir),
                 "status_file": under_base(self.status_file),
                 "log_file": under_base(self.log_file),

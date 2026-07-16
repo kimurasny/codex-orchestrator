@@ -4,9 +4,10 @@
 #   - project_root … 解析対象リポジトリのルート。相対の場合はこの設定ファイルの
 #                     配置ディレクトリ基準。別リポジトリを解析する場合は下記のように
 #                     絶対パスを指定する（対象ファイルはここを基準に存在チェック・解析）。
-#   - その他のパス（targets_file / templates_dir / output_dir / status_file / log_file）…
+#   - output_dir  … 相対の場合は project_root 基準（解析対象プロジェクト配下に出力）。
+#   - その他のパス（targets_file / templates_dir / status_file / log_file）…
 #                     project_root ではなく設定ファイルの配置ディレクトリ基準で解決される。
-#                     このためテンプレート・対象一覧・出力・ログはオーケストレーター側に留まる。
+#                     このためテンプレート・対象一覧・ログはオーケストレーター側に留まる。
 
 # 解析対象プロジェクトのルート（別リポジトリを解析する Windows 例）
 project_root: D:/git/project
@@ -17,7 +18,7 @@ targets_file: config/targets.txt
 # 使用テンプレート名（templates/ 配下の Markdown。拡張子省略可）
 template: class_spec
 
-# Markdown 出力ディレクトリ
+# Markdown 出力ディレクトリ（project_root 基準 → 解析対象プロジェクト配下に出力）
 output_dir: docs/spec
 
 # 既存出力の扱い: overwrite（上書き） / skip（既存はスキップ）

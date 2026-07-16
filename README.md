@@ -72,7 +72,8 @@ codex-orchestrator/
 YAML で管理します（`config.yaml.sample` を参照）。パス解決のルールは次のとおりで、実行時のカレントディレクトリには依存しません。
 
 - `project_root` は **解析対象リポジトリのルートで、絶対パス指定を前提** とします（本ツールは別リポジトリの解析を用途とするため）。`D:\git\other-project` のような Windows パスも指定できます。targets.txt 内の相対パスはこの `project_root` を基準に存在チェック・解析されます。相対パスを指定した場合は警告を表示します（誤って codex-orchestrator 自身を解析するのを防ぐため）。
-- `targets_file` / `output_dir` / `templates_dir` / `status_file` / `log_file` は `project_root` ではなく **設定ファイル（`--config`）の配置ディレクトリ** を基準に解決します（`--config` 未指定時はカレントディレクトリ）。これにより `project_root` に別リポジトリを指定しても、テンプレート・対象一覧・出力・ログはオーケストレーター側に留まります。
+- `output_dir`（生成した仕様書の出力先）は相対指定時に **`project_root` 基準** で解決します（`project_root` + `output_dir` ＝ **解析対象プロジェクト配下** に出力）。
+- `targets_file` / `templates_dir` / `status_file` / `log_file` は `project_root` ではなく **設定ファイル（`--config`）の配置ディレクトリ** を基準に解決します（`--config` 未指定時はカレントディレクトリ）。これにより `project_root` に別リポジトリを指定しても、テンプレート・対象一覧・ログはオーケストレーター側に留まります。
 - いずれの項目も絶対パスを指定した場合はそのまま使用されます。
 
 絶対パス判定・区切り文字はいずれも OS 非依存で処理します（`/`・`\` どちらでも可。POSIX 実行時でも `D:\...` を絶対パスとして認識）。対象ファイルが見つからない場合は、実際に存在チェックした絶対パスをログに出力します（`確認先: ...`）。
@@ -82,7 +83,7 @@ YAML で管理します（`config.yaml.sample` を参照）。パス解決のル
 | `project_root` | 解析対象プロジェクトのルート | カレントディレクトリ |
 | `targets_file` | 対象ファイル一覧のパス | `config/targets.txt` |
 | `template` | 使用テンプレート名（拡張子省略可） | `class_spec` |
-| `output_dir` | Markdown 出力ディレクトリ | `docs/spec` |
+| `output_dir` | Markdown 出力ディレクトリ（相対時は `project_root` 基準） | `docs/spec` |
 | `output_mode` | `overwrite`（上書き）/ `skip`（既存はスキップ） | `overwrite` |
 | `preserve_directory` | 相対ディレクトリ構造を保持するか | `true` |
 | `retry` | 失敗時の最大リトライ回数 | `3` |
@@ -140,7 +141,7 @@ src\BL\Common\LoginService.cs
 src\Web\Controllers\LoginController.cs
 ```
 
-出力は既定で `docs/spec/` 配下（オーケストレーター側）に生成されます。対象リポジトリ内へ出力したい場合は `output_dir` に絶対パスを指定してください。
+出力は `output_dir`（相対指定時は `project_root` 基準）に生成されます。既定 `docs/spec` の場合、`project_root/docs/spec`（＝解析対象プロジェクト配下）に出力されます。オーケストレーター側など別の場所へ出力したい場合は `output_dir` に絶対パスを指定してください。
 
 ---
 

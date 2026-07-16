@@ -4,6 +4,7 @@
 # パスの基準:
 #   - project_root … 相対の場合はこの設定ファイルの配置ディレクトリ（config/）基準。
 #                     別リポジトリを解析する場合はその絶対パス（例: D:/git/other）を指定。
+#   - output_dir  … project_root 基準（解析対象プロジェクト配下に出力）。
 #   - その他のパス … project_root ではなく config/ 基準（オーケストレーター側に留まる）。
 
 # 解析対象リポジトリのルート。.. は config/ の親＝このリポジトリのルート。
@@ -18,8 +19,8 @@ template: class_spec
 # テンプレート配置ディレクトリ（config/ 基準 → リポジトリルートの templates/）
 templates_dir: ../templates
 
-# Markdown 出力ディレクトリ（config/ 基準 → リポジトリルートの docs/spec）
-output_dir: ../docs/spec
+# Markdown 出力ディレクトリ（project_root 基準 → project_root/docs/spec に出力）
+output_dir: docs/spec
 
 output_mode: overwrite
 preserve_directory: true
