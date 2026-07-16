@@ -67,23 +67,32 @@ class OrchestratorConfig(BaseModel):
     def resolve(self, base: Path) -> OrchestratorConfig:
         """相対パス項目を絶対パスへ解決する。
 
-        project_root が相対の場合は base（設定ファイルの配置ディレクトリ）を起点に
-        解決する。その他のパス項目は解決後の project_root を起点に解決する。
+        パスの役割ごとに基準を分離する。
+
+        - ``project_root`` は解析対象リポジトリのルート。相対の場合は base
+          （設定ファイルの配置ディレクトリ）基準で解決する。対象ファイル（targets.txt
+          内の相対パス）はこの project_root 基準で存在チェック・解析される。
+        - オーケストレーター自身が扱うパス（``targets_file`` / ``templates_dir`` /
+          ``output_dir`` / ``status_file`` / ``log_file``）は project_root ではなく
+          base 基準で解決する。これにより project_root に別リポジトリを指定しても、
+          テンプレートや対象一覧・出力・ログはオーケストレーター側に留まる。
+
+        絶対パスを指定した項目はそのまま使用される。
         """
         root = base if self.project_root == Path() else _absolutize(self.project_root, base)
         root = root.resolve()
 
-        def under_root(path: Path) -> Path:
-            return _absolutize(path, root)
+        def under_base(path: Path) -> Path:
+            return _absolutize(path, base).resolve()
 
         return self.model_copy(
             update={
                 "project_root": root,
-                "targets_file": under_root(self.targets_file),
-                "output_dir": under_root(self.output_dir),
-                "templates_dir": under_root(self.templates_dir),
-                "status_file": under_root(self.status_file),
-                "log_file": under_root(self.log_file),
+                "targets_file": under_base(self.targets_file),
+                "output_dir": under_base(self.output_dir),
+                "templates_dir": under_base(self.templates_dir),
+                "status_file": under_base(self.status_file),
+                "log_file": under_base(self.log_file),
             }
         )
 

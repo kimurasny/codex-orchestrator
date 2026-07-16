@@ -145,11 +145,13 @@ def _build_config(
     template: str | None,
     output_dir: Path | None,
     output_mode: OutputMode | None,
+    project_root: Path | None,
 ) -> OrchestratorConfig:
     """YAML と CLI 引数を統合し、パス解決済みの設定を構築する。"""
     base = load_yaml_config(config_path) if config_path else OrchestratorConfig()
     merged = merge_cli_overrides(
         base,
+        project_root=project_root,
         targets_file=targets,
         template=template,
         output_dir=output_dir,
@@ -196,6 +198,14 @@ def main(
     config: Annotated[
         Path | None, typer.Option("--config", "-c", help="YAML 設定ファイルのパス")
     ] = None,
+    project_root: Annotated[
+        Path | None,
+        typer.Option(
+            "--project-root",
+            "-p",
+            help="解析対象リポジトリのルート（別リポジトリの解析時に指定）",
+        ),
+    ] = None,
     targets: Annotated[
         Path | None, typer.Option("--targets", "-t", help="対象ファイル一覧のパス")
     ] = None,
@@ -218,12 +228,16 @@ def main(
 ) -> None:
     """仕様書生成を実行する。"""
     try:
-        resolved = _build_config(config, targets, template, output_dir, output_mode)
+        resolved = _build_config(
+            config, targets, template, output_dir, output_mode, project_root
+        )
     except (FileNotFoundError, ValueError) as exc:
         console.print(f"[red]設定エラー: {exc}[/red]")
         raise typer.Exit(code=1) from exc
 
     logger = setup_logger(resolved.log_file, verbose=verbose)
+    logger.info("解析対象ルート (project_root): %s", resolved.project_root)
+    logger.info("対象一覧ファイル (targets_file): %s", resolved.targets_file)
 
     loader = TextTargetLoader(
         resolved.targets_file,

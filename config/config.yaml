@@ -1,19 +1,35 @@
 # Codex Orchestrator 動作確認用サンプル設定
 # サンプル対象（samples/ 配下）を解析する最小構成。
-# 相対パスは、この設定ファイルの配置ディレクトリ（config/）基準で解決される。
-# project_root: .. はリポジトリルート（config/ の親）を指す。
+#
+# パスの基準:
+#   - project_root … 相対の場合はこの設定ファイルの配置ディレクトリ（config/）基準。
+#                     別リポジトリを解析する場合はその絶対パス（例: D:/git/other）を指定。
+#   - その他のパス … project_root ではなく config/ 基準（オーケストレーター側に留まる）。
 
+# 解析対象リポジトリのルート。.. は config/ の親＝このリポジトリのルート。
 project_root: ..
-targets_file: config/targets.txt
+
+# 対象ファイル一覧（config/ 基準）
+targets_file: targets.txt
+
+# 使用テンプレート名（templates/ 配下の Markdown。拡張子省略可）
 template: class_spec
-output_dir: docs/spec
+
+# テンプレート配置ディレクトリ（config/ 基準 → リポジトリルートの templates/）
+templates_dir: ../templates
+
+# Markdown 出力ディレクトリ（config/ 基準 → リポジトリルートの docs/spec）
+output_dir: ../docs/spec
+
 output_mode: overwrite
 preserve_directory: true
 retry: 3
 codex_command: codex exec --sandbox workspace-write
-templates_dir: templates
-status_file: logs/status.json
-log_file: logs/run.log
+
+# 実行状態ファイル / 実行ログ（config/ 基準 → リポジトリルートの logs/）
+status_file: ../logs/status.json
+log_file: ../logs/run.log
+
 encoding_candidates:
   - utf-8-sig
   - cp932
