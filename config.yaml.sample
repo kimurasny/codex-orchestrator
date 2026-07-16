@@ -24,6 +24,11 @@ output_dir: docs/spec
 # 既存出力の扱い: overwrite（上書き） / skip（既存はスキップ）
 output_mode: overwrite
 
+# Codex の標準出力を仕様書ファイルとして保存するか。
+# false: 保存しない（Codex 自身が {{OUTPUT}} にファイルを書き出す前提。標準出力で上書きしない）
+# true : 標準出力を仕様書ファイルとして保存する（従来動作）
+save_stdout: false
+
 # 相対ディレクトリ構造を保持するか
 preserve_directory: true
 

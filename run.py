@@ -98,6 +98,11 @@ class Orchestrator:
                 target=target, state=ExecutionState.SKIPPED, output_path=output_path
             )
 
+        # save_stdout=False の場合は Codex 自身が {{OUTPUT}} にファイルを書き出すため、
+        # 事前に親ディレクトリを用意しておく（標準出力は保存しない）。
+        if not self._config.save_stdout:
+            self._writer.ensure_parent(output_path)
+
         prompt = self._renderer.render(target, output_path)
         invocation = self._executor.execute(prompt)
 
@@ -116,7 +121,11 @@ class Orchestrator:
                 error_message=invocation.stderr.strip() or None,
             )
 
-        self._writer.write(output_path, invocation.stdout)
+        if self._config.save_stdout:
+            self._writer.write(output_path, invocation.stdout)
+        elif not output_path.exists():
+            # Codex が {{OUTPUT}} にファイルを書き出す前提だが、生成されていない場合は警告する。
+            logger.warning("Codex が出力ファイルを生成していません: %s", output_path)
         logger.info(
             "成功: %s -> %s (%.2f 秒, リトライ %d 回)",
             target.relative_path,
