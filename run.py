@@ -39,6 +39,10 @@ app = typer.Typer(
     help="Codex CLI を用いてソースコードから仕様書を大量生成するオーケストレーター",
 )
 
+# --config 省略時に自動で読み込む既定の設定ファイル（run.py と同じ場所の config/config.yaml）。
+# 実行時のカレントディレクトリに依存させないため run.py の位置を基準にする。
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "config.yaml"
+
 
 class Orchestrator:
     """1 ファイル 1 実行の原則で仕様書生成を統括するコアクラス。"""
@@ -240,6 +244,9 @@ def main(
     verbose: Annotated[bool, typer.Option("--verbose", "-v", help="詳細ログを出力する")] = False,
 ) -> None:
     """仕様書生成を実行する。"""
+    if config is None and DEFAULT_CONFIG_PATH.is_file():
+        config = DEFAULT_CONFIG_PATH
+        console.print(f"[cyan]既定の設定ファイルを読み込みます: {config}[/cyan]")
     try:
         resolved = _build_config(
             config, targets, template, output_dir, output_mode, project_root
