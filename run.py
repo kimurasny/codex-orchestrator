@@ -155,7 +155,10 @@ def _build_config(
         output_dir=output_dir,
         output_mode=output_mode,
     )
-    return merged.resolve(Path.cwd())
+    # 相対 project_root は設定ファイルの配置ディレクトリ基準で解決する
+    # （実行時のカレントディレクトリに依存させない）。設定未指定時のみ CWD を基準とする。
+    base = config_path.resolve().parent if config_path else Path.cwd()
+    return merged.resolve(base)
 
 
 def _render_dry_run(config: OrchestratorConfig, targets: list[TargetFile]) -> None:

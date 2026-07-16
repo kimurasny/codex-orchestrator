@@ -69,7 +69,12 @@ codex-orchestrator/
 
 ## 設定ファイル
 
-YAML で管理します（`config.yaml.sample` を参照）。相対パスは `project_root`（未指定時はカレントディレクトリ）を基準に解決されます。パス項目は `/`・`\` のどちらの区切り文字でも指定でき、内部で正規化されます（`D:\git\project` のような Windows パスも可）。
+YAML で管理します（`config.yaml.sample` を参照）。パス解決のルールは次のとおりで、実行時のカレントディレクトリには依存しません。
+
+- `project_root` が相対パスの場合は **設定ファイル（`--config`）の配置ディレクトリ** を基準に解決します（`--config` 未指定時のみカレントディレクトリが基準）。
+- `targets_file` / `output_dir` / `templates_dir` / `status_file` / `log_file` は解決後の `project_root` を基準に解決します。
+
+パス項目は `/`・`\` のどちらの区切り文字でも指定でき、内部で正規化されます（`D:\git\project` のような Windows パスも可）。
 
 | キー | 説明 | 既定値 |
 | --- | --- | --- |

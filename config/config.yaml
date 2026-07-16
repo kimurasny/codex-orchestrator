@@ -1,7 +1,9 @@
 # Codex Orchestrator 動作確認用サンプル設定
 # サンプル対象（samples/ 配下）を解析する最小構成。
+# 相対パスは、この設定ファイルの配置ディレクトリ（config/）基準で解決される。
+# project_root: .. はリポジトリルート（config/ の親）を指す。
 
-project_root: .
+project_root: ..
 targets_file: config/targets.txt
 template: class_spec
 output_dir: docs/spec
