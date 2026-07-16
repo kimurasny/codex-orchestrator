@@ -13,5 +13,5 @@ templates_dir: templates
 status_file: logs/status.json
 log_file: logs/run.log
 encoding_candidates:
-  - utf-8
+  - utf-8-sig
   - cp932

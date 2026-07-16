@@ -32,7 +32,7 @@ templates_dir: templates
 status_file: logs/status.json
 log_file: logs/run.log
 
-# テキスト読込時のエンコーディング候補（UTF-8 を基本に Shift_JIS へフォールバック）
+# テキスト読込時のエンコーディング候補（BOM 付き/無し UTF-8 を基本に Shift_JIS へフォールバック）
 encoding_candidates:
-  - utf-8
+  - utf-8-sig
   - cp932

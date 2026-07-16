@@ -84,7 +84,7 @@ YAML で管理します（`config.yaml.sample` を参照）。相対パスは `p
 | `templates_dir` | テンプレート配置ディレクトリ | `templates` |
 | `status_file` | 実行状態ファイル | `logs/status.json` |
 | `log_file` | 実行ログ | `logs/run.log` |
-| `encoding_candidates` | 読込エンコーディング候補（順に試行） | `[utf-8, cp932]` |
+| `encoding_candidates` | 読込エンコーディング候補（順に試行） | `[utf-8-sig, cp932]` |
 
 ---
 
@@ -170,6 +170,7 @@ python run.py --config config/config.yaml --resume
 | `Codex コマンドが見つかりません` | Codex CLI がインストール済みか、`codex_command` のパスが正しいか確認してください。 |
 | `対象一覧ファイルが見つかりません` | `targets_file` のパス（`project_root` 基準）を確認してください。 |
 | `テンプレートが見つかりません` | `templates_dir` に対象テンプレートの Markdown があるか確認してください。 |
+| 存在するのに `対象ファイルが存在しないためスキップします` と出る | `targets.txt` の BOM（メモ帳の UTF-8 保存等）や先頭・末尾の空白が原因の可能性があります。BOM は `utf-8-sig` で自動除去されますが、`project_root` と相対パスの組み合わせ（例: `project_root: C:\tool` + `tmp\input.cs` = `C:\tool\tmp\input.cs`）も併せて確認してください。 |
 | 文字化けする | `encoding_candidates` に対象ファイルのエンコーディング（例: `cp932`）が含まれているか確認してください。 |
 | 途中で止まった | `--resume` を付けて再実行すると、成功済みを除いた未処理ファイルのみ処理します。 |
 | 失敗が続く | 失敗時は最大 `retry` 回リトライします。`logs/run.log` のエラーメッセージを確認してください。 |
