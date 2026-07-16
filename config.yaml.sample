@@ -1,0 +1,38 @@
+# Codex Orchestrator 設定サンプル
+# 相対パスは project_root（未指定時は設定ファイルの配置ディレクトリ）基準で解決されます。
+
+# 解析対象プロジェクトのルート（Windows 例）
+project_root: D:/git/project
+
+# 対象ファイル一覧（1 行 1 相対パス）
+targets_file: targets.txt
+
+# 使用テンプレート名（templates/ 配下の Markdown。拡張子省略可）
+template: class_spec
+
+# Markdown 出力ディレクトリ
+output_dir: docs/spec
+
+# 既存出力の扱い: overwrite（上書き） / skip（既存はスキップ）
+output_mode: overwrite
+
+# 相対ディレクトリ構造を保持するか
+preserve_directory: true
+
+# 失敗時の最大リトライ回数
+retry: 3
+
+# Codex CLI 実行コマンド
+codex_command: codex exec --sandbox workspace-write
+
+# テンプレート配置ディレクトリ
+templates_dir: templates
+
+# 実行状態ファイル / 実行ログ
+status_file: logs/status.json
+log_file: logs/run.log
+
+# テキスト読込時のエンコーディング候補（UTF-8 を基本に Shift_JIS へフォールバック）
+encoding_candidates:
+  - utf-8
+  - cp932

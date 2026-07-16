@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ruff_cache/
+
+# 実行時生成物（サンプルは *.sample を参照）
+logs/run.log
+logs/status.json
+docs/spec/

@@ -1,0 +1,48 @@
+[project]
+name = "codex-orchestrator"
+version = "0.1.0"
+description = "Codex CLI を利用してソースコードから仕様書を大量生成するオーケストレーター"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "jinja2>=3.1.0",
+    "pydantic>=2.7.0",
+    "PyYAML>=6.0.0",
+]
+
+[project.scripts]
+codex-orchestrator = "run:app"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = [
+    "run",
+    "config",
+    "models",
+    "target_loader",
+    "prompt_renderer",
+    "codex_executor",
+    "output_writer",
+    "status_manager",
+    "logger",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]

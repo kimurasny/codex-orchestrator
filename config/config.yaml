@@ -1,0 +1,17 @@
+# Codex Orchestrator 動作確認用サンプル設定
+# サンプル対象（samples/ 配下）を解析する最小構成。
+
+project_root: .
+targets_file: config/targets.txt
+template: class_spec
+output_dir: docs/spec
+output_mode: overwrite
+preserve_directory: true
+retry: 3
+codex_command: codex exec --sandbox workspace-write
+templates_dir: templates
+status_file: logs/status.json
+log_file: logs/run.log
+encoding_candidates:
+  - utf-8
+  - cp932

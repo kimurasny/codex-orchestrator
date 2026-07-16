@@ -1,0 +1,13 @@
+# Codex Orchestrator 対象ファイル一覧サンプル
+# - リポジトリルートからの相対パス
+# - 空行と # から始まる行は無視されます
+# - 重複は自動的に除外されます
+
+samples/LoginService.cs
+samples/UserService.cs
+
+# 下の行は重複のため無視されます
+samples/LoginService.cs
+
+# 存在しないファイルは警告を出してスキップされます
+samples/NotExists.cs

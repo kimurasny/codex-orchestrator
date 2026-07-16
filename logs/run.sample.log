@@ -1,0 +1,9 @@
+2026-07-16 10:00:00 [INFO] 実行を開始します: 2026-07-16 10:00:00
+2026-07-16 10:00:00 [INFO] 対象ファイルを 2 件読み込みました
+2026-07-16 10:00:00 [WARNING] 対象ファイルが存在しないためスキップします: samples/NotExists.cs
+2026-07-16 10:00:00 [INFO] [1/2] 処理中: samples/LoginService.cs
+2026-07-16 10:00:03 [INFO] 成功: samples/LoginService.cs -> docs/spec/samples/LoginService.md (3.12 秒, リトライ 0 回)
+2026-07-16 10:00:03 [INFO] [2/2] 処理中: samples/UserService.cs
+2026-07-16 10:00:05 [WARNING] Codex 実行が失敗しました (試行 1/4, 終了コード=1)
+2026-07-16 10:00:07 [INFO] 成功: samples/UserService.cs -> docs/spec/samples/UserService.md (4.05 秒, リトライ 1 回)
+2026-07-16 10:00:07 [INFO] 実行を終了します: 2026-07-16 10:00:07
