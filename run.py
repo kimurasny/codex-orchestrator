@@ -5,7 +5,7 @@ Markdown 保存、状態管理までを統括する。
 
 使用例:
     python run.py --config config.yaml
-    python run.py --targets targets.txt
+    python run.py --targets config/targets.txt
     python run.py --template class_spec
     python run.py --resume
     python run.py --dry-run

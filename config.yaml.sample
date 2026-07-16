@@ -5,7 +5,7 @@
 project_root: D:/git/project
 
 # 対象ファイル一覧（1 行 1 相対パス）
-targets_file: targets.txt
+targets_file: config/targets.txt
 
 # 使用テンプレート名（templates/ 配下の Markdown。拡張子省略可）
 template: class_spec
