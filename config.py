@@ -65,11 +65,13 @@ class OrchestratorConfig(BaseModel):
         return value
 
     def resolve(self, base: Path) -> OrchestratorConfig:
-        """相対パス項目を base（=project_root）基準の絶対パスへ解決する。
+        """相対パス項目を絶対パスへ解決する。
 
-        project_root 自体が相対の場合は base を起点に解決する。
+        project_root が相対の場合は base（設定ファイルの配置ディレクトリ）を起点に
+        解決する。その他のパス項目は解決後の project_root を起点に解決する。
         """
         root = base if self.project_root == Path() else _absolutize(self.project_root, base)
+        root = root.resolve()
 
         def under_root(path: Path) -> Path:
             return _absolutize(path, root)
