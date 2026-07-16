@@ -9,6 +9,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+from config import clean_path
 from logger import get_logger
 from models import TargetFile
 
@@ -66,9 +67,13 @@ class TargetLoader(ABC):
                 continue
             seen.add(relative)
 
-            absolute = (self._project_root / relative).resolve()
+            absolute = clean_path(self._project_root / relative)
             if not absolute.is_file():
-                logger.warning("対象ファイルが存在しないためスキップします: %s", relative)
+                logger.warning(
+                    "対象ファイルが存在しないためスキップします: %s（確認先: %s）",
+                    relative,
+                    absolute,
+                )
                 continue
 
             targets.append(TargetFile(relative_path=relative, absolute_path=absolute))

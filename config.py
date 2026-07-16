@@ -80,10 +80,10 @@ class OrchestratorConfig(BaseModel):
         絶対パスを指定した項目はそのまま使用される。
         """
         root = base if self.project_root == Path() else _absolutize(self.project_root, base)
-        root = _clean(root)
+        root = clean_path(root)
 
         def under_base(path: Path) -> Path:
-            return _clean(_absolutize(path, base))
+            return clean_path(_absolutize(path, base))
 
         return self.model_copy(
             update={
@@ -97,7 +97,7 @@ class OrchestratorConfig(BaseModel):
         )
 
 
-def _is_absolute_any(path: Path) -> bool:
+def is_absolute_any(path: Path) -> bool:
     """実行 OS に依存せず絶対パスかどうかを判定する。
 
     Windows のドライブ付き（``D:\\...``）・UNC（``\\\\server\\share``）パスは、
@@ -109,11 +109,11 @@ def _is_absolute_any(path: Path) -> bool:
 
 def _absolutize(path: Path, base: Path) -> Path:
     """path が相対なら base 基準で絶対化する。"""
-    return path if _is_absolute_any(path) else (base / path)
+    return path if is_absolute_any(path) else (base / path)
 
 
-def _clean(path: Path) -> Path:
-    """絶対パスを正規化する（実行 OS に依存しない）。
+def clean_path(path: Path) -> Path:
+    """パスを正規化する（実行 OS に依存しない）。
 
     ホスト OS ネイティブの絶対パスは resolve() で ``..`` やシンボリックリンクを
     解決する。Windows 形式の絶対パス（POSIX 上では相対扱いになる）は、CWD を

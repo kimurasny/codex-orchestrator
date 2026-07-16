@@ -21,7 +21,12 @@ import typer
 from rich.table import Table
 
 from codex_executor import CodexExecutor
-from config import OrchestratorConfig, load_yaml_config, merge_cli_overrides
+from config import (
+    OrchestratorConfig,
+    is_absolute_any,
+    load_yaml_config,
+    merge_cli_overrides,
+)
 from logger import console, get_logger, setup_logger
 from models import ExecutionResult, ExecutionState, OutputMode, RunSummary, TargetFile
 from output_writer import OutputWriter
@@ -157,6 +162,14 @@ def _build_config(
         output_dir=output_dir,
         output_mode=output_mode,
     )
+    # 解析対象は別リポジトリを想定しており、project_root は絶対パス指定を前提とする。
+    # 相対パスが指定された場合は誤って codex-orchestrator 側を解析しうるため警告する。
+    if not is_absolute_any(merged.project_root):
+        console.print(
+            "[yellow]警告: project_root が絶対パスではありません "
+            f"({merged.project_root})。解析対象リポジトリの絶対パスを指定してください。"
+            "[/yellow]"
+        )
     # 相対 project_root は設定ファイルの配置ディレクトリ基準で解決する
     # （実行時のカレントディレクトリに依存させない）。設定未指定時のみ CWD を基準とする。
     base = config_path.resolve().parent if config_path else Path.cwd()
