@@ -85,6 +85,7 @@ YAML で管理します（`config.yaml.sample` を参照）。パス解決のル
 | `template` | 使用テンプレート名（拡張子省略可） | `class_spec` |
 | `output_dir` | Markdown 出力ディレクトリ（相対時は `project_root` 基準） | `docs/spec` |
 | `output_mode` | `overwrite`（上書き）/ `skip`（既存はスキップ） | `overwrite` |
+| `save_stdout` | Codex の標準出力を仕様書として保存するか（`false` の場合は Codex 自身が `{{OUTPUT}}` に書き出す前提で、標準出力は保存しない） | `false` |
 | `preserve_directory` | 相対ディレクトリ構造を保持するか | `true` |
 | `retry` | 失敗時の最大リトライ回数 | `3` |
 | `codex_command` | Codex CLI 実行コマンド | `codex exec --sandbox workspace-write` |
@@ -142,6 +143,8 @@ src\Web\Controllers\LoginController.cs
 ```
 
 出力は `output_dir`（相対指定時は `project_root` 基準）に生成されます。既定 `docs/spec` の場合、`project_root/docs/spec`（＝解析対象プロジェクト配下）に出力されます。オーケストレーター側など別の場所へ出力したい場合は `output_dir` に絶対パスを指定してください。
+
+仕様書ファイルの書き出しは既定（`save_stdout: false`）では **Codex 自身が `{{OUTPUT}}` に対して行う** 前提です。オーケストレーターは Codex の標準出力を保存しないため、Codex が生成したファイルを標準出力で上書きしません（親ディレクトリは事前に作成します）。従来どおり標準出力を仕様書として保存したい場合は `save_stdout: true` を指定してください。
 
 ---
 

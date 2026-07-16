@@ -44,6 +44,10 @@ class OrchestratorConfig(BaseModel):
     template: str = "class_spec"
     output_dir: Path = Path("docs/spec")
     output_mode: OutputMode = OutputMode.OVERWRITE
+    # Codex の標準出力を仕様書ファイルとして保存するか。
+    # False（既定）の場合は保存せず、Codex 自身が {{OUTPUT}} にファイルを書き出す前提とする
+    # （標準出力で仕様書ファイルを上書きしない）。
+    save_stdout: bool = False
     preserve_directory: bool = True
     retry: int = 3
     codex_command: str = "codex exec --sandbox workspace-write"

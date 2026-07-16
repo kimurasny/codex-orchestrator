@@ -43,6 +43,10 @@ class OutputWriter:
         """保存モードに基づき、この出力をスキップすべきか判定する。"""
         return self._output_mode is OutputMode.SKIP and output_path.exists()
 
+    def ensure_parent(self, output_path: Path) -> None:
+        """出力先の親ディレクトリを用意する（Codex がファイルを書き出す前提の場合に使用）。"""
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
     def write(self, output_path: Path, content: str) -> None:
         """Markdown を UTF-8 で保存する（親ディレクトリは自動作成）。"""
         output_path.parent.mkdir(parents=True, exist_ok=True)
