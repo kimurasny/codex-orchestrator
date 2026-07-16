@@ -1,6 +1,0 @@
-# サンプル対象ファイル一覧
-# リポジトリルートからの相対パスを 1 行ずつ記述します。
-# 空行および # から始まる行は無視され、重複は除外されます。
-
-samples/LoginService.cs
-samples/UserService.cs

@@ -21,7 +21,7 @@ class OrchestratorConfig(BaseModel):
     """
 
     project_root: Path = Field(default_factory=Path.cwd)
-    targets_file: Path = Path("targets.txt")
+    targets_file: Path = Path("config/targets.txt")
     template: str = "class_spec"
     output_dir: Path = Path("docs/spec")
     output_mode: OutputMode = OutputMode.OVERWRITE

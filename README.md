@@ -53,7 +53,7 @@ codex-orchestrator/
 │   └── api_spec.md
 ├── config/                # 動作確認用サンプル設定・対象一覧
 │   ├── config.yaml
-│   └── targets.txt
+│   └── targets.txt        # 対象一覧サンプル（既定）
 ├── samples/               # サンプル解析対象ソース
 ├── docs/spec/             # 生成された仕様書の出力先（既定）
 ├── logs/                  # 実行ログ / 状態ファイル
@@ -61,7 +61,6 @@ codex-orchestrator/
 │   ├── status.json        # 実行状態（自動生成）
 │   └── run.sample.log     # サンプル実行ログ
 ├── config.yaml.sample     # 設定サンプル
-├── targets.txt            # 対象一覧サンプル
 ├── requirements.txt
 └── pyproject.toml
 ```
@@ -75,7 +74,7 @@ YAML で管理します（`config.yaml.sample` を参照）。相対パスは `p
 | キー | 説明 | 既定値 |
 | --- | --- | --- |
 | `project_root` | 解析対象プロジェクトのルート | カレントディレクトリ |
-| `targets_file` | 対象ファイル一覧のパス | `targets.txt` |
+| `targets_file` | 対象ファイル一覧のパス | `config/targets.txt` |
 | `template` | 使用テンプレート名（拡張子省略可） | `class_spec` |
 | `output_dir` | Markdown 出力ディレクトリ | `docs/spec` |
 | `output_mode` | `overwrite`（上書き）/ `skip`（既存はスキップ） | `overwrite` |
@@ -93,7 +92,7 @@ YAML で管理します（`config.yaml.sample` を参照）。相対パスは `p
 
 ```bash
 python run.py --config config.yaml     # 設定ファイルを指定して実行
-python run.py --targets targets.txt    # 対象一覧を上書き指定
+python run.py --targets config/targets.txt    # 対象一覧を上書き指定
 python run.py --template class_spec     # テンプレートを上書き指定
 python run.py --resume                  # 未処理ファイルのみ再開実行
 python run.py --dry-run                 # Codex を起動せず実行予定のみ表示
@@ -132,7 +131,7 @@ CLI 引数は YAML 設定より優先されます。
 
 ## 対象ファイル一覧
 
-対象ファイルは探索せず、事前に用意した一覧ファイルを読み込みます（`targets.txt` を参照）。
+対象ファイルは探索せず、事前に用意した一覧ファイルを読み込みます（既定は `config/targets.txt`）。
 
 - リポジトリルート（`project_root`）からの相対パス
 - 空行は無視
