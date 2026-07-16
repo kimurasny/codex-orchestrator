@@ -12,7 +12,9 @@ from pathlib import Path
 from logger import get_logger
 from models import TargetFile
 
-DEFAULT_ENCODINGS: tuple[str, ...] = ("utf-8", "cp932")
+# utf-8-sig は BOM 付き UTF-8（メモ帳の既定保存等）の BOM を除去し、
+# BOM 無し UTF-8 もそのまま読み込める。失敗時は Shift_JIS(cp932) へフォールバック。
+DEFAULT_ENCODINGS: tuple[str, ...] = ("utf-8-sig", "cp932")
 
 
 def read_text_with_fallback(path: Path, encodings: tuple[str, ...] = DEFAULT_ENCODINGS) -> str:
@@ -77,7 +79,7 @@ class TargetLoader(ABC):
     @staticmethod
     def _normalize(raw: str) -> str | None:
         """1 行を正規化し、無視対象なら None を返す。"""
-        stripped = raw.strip()
+        stripped = raw.lstrip("\ufeff").strip()
         if not stripped or stripped.startswith("#"):
             return None
         return stripped.replace("\\", "/")

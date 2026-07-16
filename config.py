@@ -50,7 +50,7 @@ class OrchestratorConfig(BaseModel):
     templates_dir: Path = Path("templates")
     status_file: Path = Path("logs/status.json")
     log_file: Path = Path("logs/run.log")
-    encoding_candidates: list[str] = Field(default_factory=lambda: ["utf-8", "cp932"])
+    encoding_candidates: list[str] = Field(default_factory=lambda: ["utf-8-sig", "cp932"])
 
     @field_validator(*_PATH_FIELDS, mode="before")
     @classmethod
