@@ -80,10 +80,10 @@ class OrchestratorConfig(BaseModel):
         絶対パスを指定した項目はそのまま使用される。
         """
         root = base if self.project_root == Path() else _absolutize(self.project_root, base)
-        root = root.resolve()
+        root = _clean(root)
 
         def under_base(path: Path) -> Path:
-            return _absolutize(path, base).resolve()
+            return _clean(_absolutize(path, base))
 
         return self.model_copy(
             update={
@@ -97,9 +97,33 @@ class OrchestratorConfig(BaseModel):
         )
 
 
+def _is_absolute_any(path: Path) -> bool:
+    """実行 OS に依存せず絶対パスかどうかを判定する。
+
+    Windows のドライブ付き（``D:\\...``）・UNC（``\\\\server\\share``）パスは、
+    POSIX 上の Path.is_absolute() では相対と判定されてしまう。区切り文字と同様に
+    Windows 形式の絶対パスも扱えるよう、PureWindowsPath としての判定も併用する。
+    """
+    return path.is_absolute() or PureWindowsPath(str(path)).is_absolute()
+
+
 def _absolutize(path: Path, base: Path) -> Path:
     """path が相対なら base 基準で絶対化する。"""
-    return path if path.is_absolute() else (base / path)
+    return path if _is_absolute_any(path) else (base / path)
+
+
+def _clean(path: Path) -> Path:
+    """絶対パスを正規化する（実行 OS に依存しない）。
+
+    ホスト OS ネイティブの絶対パスは resolve() で ``..`` やシンボリックリンクを
+    解決する。Windows 形式の絶対パス（POSIX 上では相対扱いになる）は、CWD を
+    前置してしまう resolve() を避け、字句的な正規化のみ行う。
+    """
+    if path.is_absolute():
+        return path.resolve()
+    if PureWindowsPath(str(path)).is_absolute():
+        return Path(PureWindowsPath(str(path)).as_posix())
+    return path.resolve()
 
 
 def load_yaml_config(config_path: Path) -> OrchestratorConfig:
